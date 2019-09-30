@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>0cms</title>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="css.css">
+</head>
+<body>
+<div id="title">
+<h1>0cms</h1>
+</div>
+
+<div id="meet">
+<h1>Meet 0cms</h1>
+<p>0cms (spelled zero-cms) is a static website generator.  You can pronounce it &ldquo;Occams&rdquo; and think of it as <a href="https://en.wikipedia.org/wiki/Occam's_razor">Occam’s Razor</a> (“Entities should not be multiplied without necessity”) for a website content management system.</p>
+<div class="cols">
+<h2>Simple</h2>
+<ul>
+<li>There’s a single command &ndash; 0cms &ndash; with no options.</li>
+<li>You declare your page using easy function-like notation.</li>
+<li>0cms applies a cascading template system that you define.</li>
+</ul>
+</div>
+<div class="cols">
+<h2>Powerful</h2>
+<ul>
+<li>Everything is Python &ndash; you can do as little or as much processing as you want.</li>
+<li>Want to create semi-dynamic content that pulls data from somewhere?  0cms has it covered.</li>
+</ul>
+</div>
+<div class="cols">
+<h2>Respectful</h2>
+<ul>
+<li>0cms has a design that allows any markup language to be used.</li>
+<li>Structure and build your site your way: 0cms enables, it doesn’t prescribe.</li>
+</ul>
+</div>
+<p>0cms is built on the principal that the most maintainable code is the code you don’t write.  0cms does the least it possibly can to get your site to build.  As a result, it has no build system &ndash; instead it uses <a href="https://ninja-build.org/">Ninja</a>.</p>
+<p>0cms has no built-in code for blogs, feeds, or sitemaps.  It ships with no templates or themes or other paraphernalia.  This doesn’t mean that these things are impossible &ndash; they are totally possible, but you create and maintain them yourself.  This also means that the maintenance schedule is yours:  0cms won’t unexpectedly break or change your site when you upgrade.</p>
+</div>
+
+<div id="get">
+<h1>Get 0cms</h1>
+<p>It feels all wrong, but I am not versioning 0cms at this stage.  You can always grab the source from <a href="https://bitbucket.org/multixrulz/0cms/downloads/">bitbucket</a></p>
+</div>
+
+<div id="use">
+<h1>Use 0cms</h1>
+<p>Let’s make a really minimal website.  First install 0cms, or download it somewhere and put that directory in your $PATH.</p>
+<p>Create a directory for your website.  In that directory create another directory named <code>src</code>, and a file <code>0cms-config</code>.  In the <code>src</code> directory create two files: <code>index.html.0p</code> and <code>0cms-template</code>.  Now populate the files with the following:</p>
+<p>0cms-config:</p>
+<pre><code>source = &quot;src&quot;
+target = &quot;html&quot;
+</code></pre>
+
+<p>0cms-template:</p>
+<pre><code>Template(&quot;&quot;&quot;&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+&lt;title&gt;{title}&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+{document}
+&lt;/body&gt;
+&lt;/html&gt;
+&quot;&quot;&quot;)
+</code></pre>
+
+<p>index.html:</p>
+<pre><code>Replacements(
+    title=&quot;My first 0cms website&quot;
+)
+
+WebPage(Markdown(&quot;&quot;&quot;
+# Hello World
+
+I've just created my first 0cms website!
+&quot;&quot;&quot;))
+</code></pre>
+
+<p>Now open a shell in your website directory and run</p>
+<pre><code>% 0cms
+</code></pre>
+
+<p>0cms should build your site, and you can examine the output in the <code>html</code> directory.</p>
+</div>
+
+<div id="learn">
+<h1>Learn 0cms</h1>
+<p>In the <a href="#use">Use 0cms</a> section above you learned how to set up an 0cms website.  But what else can you put in these files?</p>
+<h2>0cms-config</h2>
+<p><code>0cms-config</code> is Python code.  0cms can make use of the following variables in this file &ndash; the defaults are shown below:</p>
+<pre><code>site_source = 'src'
+site_target = 'html'
+ignore_source = []
+ignore_target = []
+</code></pre>
+
+<p>0cms uses a foolproof method to determine the files that appear in the built website:  everything in the source website.  So you structure your source the way you want, and that structure is mirrored in the target.  There are no magic targets that get built automatically, and no source files that disappear &ndash; with one exception:  <code>0cms-template</code> files are built to <code>0cms-template.built</code> files in the source tree, and neither appears in the target tree.</p>
+<dl>
+<dt>site_source (string)</dt>
+<dd>the directory relative to the <code>0cms-config</code> file that contains the 0cms source files for the website.</dd>
+<dt>site_target (string)</dt>
+<dd>the directory relative to the <code>0cms-config</code> file that the website is to be generated into.</dd>
+<dt>ignore_source (list of glob patterns)</dt>
+<dd>paths in the source directory to completely ignore.</dd>
+<dt>ignore_target (list of glob patterns)</dt>
+<dd>paths in the target directory to completely ignore.  0cms removes files from the target that are not in the source; this variable lists patterns that should not be removed.  This could be used for git files (<code>[".git", ".git/*"]</code>) that are necessary if you’re publishing to github pages, for example.</dd>
+</dl>
+<p><code>ignore_source</code> and <code>ignore_target</code> are used as arguments to <code>fnmatch</code> &ndash; see the documentation for fnmatch for more information about that.</p>
+<p>Remember that 0cms-config is just Python code: you can put anything in there.  If you need some fancy logic to help determine what to put into these variabes, write it.  If you need to adjust <code>sys.path</code> as I do, do it.  (Note that if you adjust <code>sys.path</code>, also change the environment variable $PYTHONPATH if you expect the changes to be accessible to each page as it’s built).</p>
+<h2>0cms-template</h2>
+<p><code>0cms-template</code> is Python code.  You do need to call the function <code>Template()</code> to define your template.  There won’t be much output if you don’t.</p>
+<h3>Template(template)</h3>
+<p>You supply a string to <code>Template()</code>.  This string may contain replacement fields that are processed using Python’s standard <code>str.format()</code> function.  A template should contain a {document} field.  This is replaced by the content defined in the <code>WebPage()</code> function for each page.  You may also use as many other fields as you want.  If you make multiple calls to this function, only the last is applied.</p>
+<h3>Replacements()</h3>
+<p><code>Replacements()</code> takes a keyword argument list of replacement fields and their values.  It is documented in more detail below.</p>
+<h3>Class methods for defaults</h3>
+<p>At the moment, only the <code>Markdown</code> class has any of these.</p>
+<dl>
+<dt>Markdown.default_extensions(extensions)</dt>
+<dd>extensions is a list of strings, each one being the name of a python-markdown extension that you want to use in all pages affected by this template.  See the <a href="https://python-markdown.github.io/extensions/">python-markdown documentation</a> for more information.</dd>
+</dl>
+<h3>Template cascading / inheritance</h3>
+<p>Templates are applied to the directory they are in, and to all subdirectories.  You may define templates in subdirectories too.  These work in a very simple way: they are simply concatenated together.  Thus a subdirectory template may overwrite the variables of its parent, define a new <code>Template()</code>, etc.</p>
+<h3>GetTemplate()</h3>
+<p>This function returns the currently-defined template.  It exists so that a subdirectory’s 0cms-template file may easily access the template applied by its parent.  This could be done in other ways, but it helps to keep template files clean in simple cases.</p>
+<h2>.0p, .0s and .0e files</h2>
+<p>There is a tiny bit of “magic” here.  First of all, the .0? extension is removed from the target when these files when they are built.</p>
+<dl>
+<dt>.0p (page) file</dt>
+<dd>These files depend only upon themselves and their directory’s template.</dd>
+<dt>.0s (summary) file</dt>
+<dd>These files depend upon themselves, their directory’s template, and any number of other files specified by a call to the <code>Dependencies()</code> function.  They are designed for things like feeds and sitemaps.</dd>
+<dt>.0e (external) file</dt>
+<dd>These files are always rebuilt every time 0cms is run.  The .0e extension is used to indicate that the file depends on files or other information outside the 0cms website tree.  You could use this to list files somewhere else on the system, or to query a database or get server status, etc.</dd>
+<dt>.html.0? files</dt>
+<dd>Source files that target .html are treated differently from every other kind of target extension.  It is expected that the <code>WebPage()</code> function will be called to trigger the application of a template, creation of some predefined replacements, replacement of all replacement fields, and output of html.</dd>
+<dt>.*.0? files</dt>
+<dd>Source files that target something other than html are expected to call the <code>Data()</code> function with the data that is to be written to the target file.</dd>
+</dl>
+<h2>All other files</h2>
+<p>All other files are simply copied to the target directory.</p>
+<h2>Functions and Classes available to 0cms-template and *.0? files</h2>
+<h3>Markdown class</h3>
+<p>You use this to use Markdown-formatted text in a page.  For example:</p>
+<pre><code>WebPage(Markdown(&quot;&quot;&quot;# Hello World&quot;&quot;&quot;))
+</code></pre>
+
+<p>Use <code>Markdown.default_extensions()</code> to specify the python-markdown extensions you want to use.  When this is used in a template, the extensions apply to all pages using that template.  When used in a page, they only apply to that page.  For example:</p>
+<pre><code>Markdown.default_extensions(['smarty', 'fenced_code'])
+</code></pre>
+
+<p>Markdown extensions can also be specified each time you create a Markdown object.  For example:</p>
+<pre><code>Markdown(&quot;&quot;&quot;
+# Here’s some code
+
+```
+#!/usr/bin/python
+
+print(&quot;Hello World&quot;)
+```
+&quot;&quot;&quot;, extensions=['fenced_code'], overwrite=True)
+</code></pre>
+
+<p>The overwrite argument defaults to False, meaning that the extensions in the list are added to the defaults.  If you supply <code>overwrite=True</code>, the extensions in the list are the only ones that are used.</p>
+<h3>Asciidoc class</h3>
+<p>You use this to use Asciidoc-formatted text in a page.  For example:</p>
+<pre><code>WebPage(Asciidoc(&quot;&quot;&quot;# Hello World&quot;&quot;&quot;))
+</code></pre>
+
+<p>Asciidoc is called with the following options:</p>
+<p><code>asciidoc -b html5 -s</code></p>
+<p>This generates html5 output and only outputs a HTML fragment, not a complete page.</p>
+<h3>HtmlDiv class</h3>
+<p>You use this to insert a HTML div element, as these are not well-supported by many markup languages.  Use it like this:</p>
+<pre><code>HtmlDiv(Markdown(&quot;&quot;&quot;# Hello World&quot;&quot;&quot;), htmlid=&quot;myid&quot;, htmlclass=&quot;myclass&quot;)
+</code></pre>
+
+<p>This usage allows your page source to mirror the generated HTML, where content is wrapped within a div tag.  The arguments <code>htmlid</code> and <code>htmlclass</code> are optional, and allow you to add id and class attributes to the div tag.</p>
+<p>You may use any number of content arguments to HtmlDiv.</p>
+<h3>HtmlImage class</h3>
+<p>You use this to insert a HTML image tag, as these are not well-supported by many markup languages.  Use it like this:</p>
+<pre><code>HtmlImage(&quot;path/to/image.jpg&quot;, alt=&quot;Picture of a tree&quot;, htmlid=&quot;myid&quot;, htmlclass=&quot;myclass&quot;)
+</code></pre>
+
+<p>The alt text is optional.  The arguments <code>htmlid</code> and <code>htmlclass</code> are optional, and allow you to add id and class attributes to the image tag.</p>
+<p>It’s not possible to insert images directly into headings or lists, etc. in many markup languages.  However, you can assign images to replacement fields, and use the field in the heading or list like this:</p>
+<pre><code>Replacements(
+    img=HtmlImage(&quot;path/to/image.jpg&quot;)
+)
+
+WebPage(Markdown(&quot;&quot;&quot;# See, a heading with an image {img}&quot;&quot;&quot;))
+</code></pre>
+
+<h3>Html class</h3>
+<p>You can use this to insert plain HTML, if you ever need to do that.</p>
+<h3>DirListing class</h3>
+<p>This class can be used in .0s files for for generating feeds and the like.  Use it like this:</p>
+<pre><code>d = DirListing(pattern='*.html.0p')
+</code></pre>
+
+<p>DirListing returns a tuple of <code>SiteItem</code>s.  SiteItem has a <code>.source()</code> method that returns the complete path to the source file, and a <code>.url()</code> method that returns the absolute URL of the page, minus the protocol and domain parts.</p>
+<h3>Dependencies() function</h3>
+<p>You use this function do specify the dependencies of a .0s file.  You pass it a tuple of the full paths of files that the page depends on.</p>
+<h3>Replacements() function</h3>
+<p>You use this function like this:</p>
+<pre><code>Replacements(
+    title=&quot;My cool page title&quot;
+    description=&quot;This will turn up in page summaries reported by search engines&quot;
+)
+</code></pre>
+
+<p>Pass in any replacement fields that you’ve used in your template or page as keyword arguments.</p>
+<h3>WebPage() function</h3>
+<p>This function declares the web page that will be created.  Pass in any number of arguments.  They should be strings or something that can be converted to strings (eg. Markdown, Asciidoc, HtmlDiv etc).</p>
+<h3>Data() function</h3>
+<p>This function is used by non-html pages to set up the content that will be written to the target file.</p>
+<h3>Template() function</h3>
+<p>This function is used to set up the template.  It takes one argument, that is a string.</p>
+<h3>GetTemplate() function</h3>
+<p>This function returns the template that was specified by Template().  It is intended to be used by templates in subdirectories that wish to modify the parent template.</p>
+<h3>source_path() function</h3>
+<p>This is only usable within a page.  Returns the path to the source file being processed.</p>
+<h3>template_path() function</h3>
+<p>This is only usable within a page.  Returns the path to the template file being applied.</p>
+<h3>target_path() function</h3>
+<p>This is only usable within a page.  Returns the path to the target file that will be written.</p>
+<h3>source_root() function</h3>
+<p>This is only usable within a page.  Returns the path to the root of the source tree for the website.</p>
+<h3>Importer class</h3>
+<p>Use this class like:</p>
+<pre><code>page = Importer(path_to_source_file)
+</code></pre>
+
+<p>This provides you access to parts of a page, from some other page (for example, creating a feed that needs to know the title and description of each page).  The following methods are available from an imported page object:</p>
+<h4>replacements() function</h4>
+<p>Returns the replacements that have been specified by a call to <code>Replacements()</code>.</p>
+<h4>get_replacement() function</h4>
+<p>Returns a particular replacement:</p>
+<pre><code>title = page.get_replacement('title')
+</code></pre>
+
+<h4>dependencies() function</h4>
+<p>Returns the dependecies that have been specified by a call to <code>Dependencies()</code>.</p>
+<h4>html() function</h4>
+<p>Returns the html for the page, doing conversions on all objects that have been passed to the <code>WebPage()</code> function.</p>
+<h4>data() function</h4>
+<p>Returns the data for the page that has been passed to the <code>Data()</code> function.</p>
+<h4>template() function</h4>
+<p>Returns the template that was declared by a call to <code>Template()</code> in a template file.</p>
+<h2>Build functions</h2>
+<p>Items passed to <code>WebPage()</code>, page components such as <code>Markdown()</code>, and also <code>Template()</code> may also be callables.  This allows you to pass in a function so that heavy processing can be done only once instead of every time the page is imported, and it can be deferred to the moment when the html is actually required.</p>
+<h2>The 0build program</h2>
+<p>Calling 0cms produces a <code>build.ninja</code> file that is used by ninja to coordinate the build.  If you examine this file, you will find a program named 0build.  0build is a small program that is used as follows:</p>
+<pre><code>% 0build &lt;source_file&gt; &lt;template_file&gt; [other dependencies...] &lt;target file&gt;
+</code></pre>
+
+<p>You will probably never need to use 0build directly.</p>
+</div>
+
+<div id="collaborate">
+<h1>Collaborate</h1>
+<p>I’ve set up an issue tracker on <a href="https://bitbucket.org/multixrulz/0cms/issues?status=new&amp;status=open">bitbucket</a></p>
+</div>
+
+<div id="footer">
+<p>Built with <a href="https://0cms.henley.id.au">0cms</a></p>
+<p>Last built 2019-09-30 12:08:41.768006</p>
+</div>
+
+<div id="navigation">
+<ul>
+<li><a href="#meet">Meet</a></li>
+<li><a href="#get">Get</a></li>
+<li><a href="#use">Use</a></li>
+<li><a href="#learn">Learn</a></li>
+<li><a href="#collaborate">Collaborate</a></li>
+</ul>
+</div>
+</body>
+</html>

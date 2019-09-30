@@ -1,0 +1,131 @@
+/* reset */
+html, body {
+margin: 0;
+border: 0;
+padding: 0;
+}
+
+body {
+background: #efefef;
+font-family: sans-serif;
+font-size: 2vmin;
+margin: auto;
+min-width: 40em;
+max-width: 70em;
+}
+
+#navigation {
+position: fixed;
+top: 0;
+margin: auto;
+min-width: 40em;
+max-width: 70em;
+background: #32283D;
+font-weight: bold;
+}
+
+#navigation ul {
+width: 70em;
+list-style: none;
+padding: 0.5em 0 0.5em 0;
+margin: 0;
+}
+#navigation li {
+display: inline;
+margin: 0 1em;
+}
+#navigation li a {
+text-decoration: none;
+padding: 0.5em 1em 0.5em 1em;
+margin: 0;
+color: #ECB824;
+}
+
+#title {
+background: #32283D;
+color: #ECB824;
+padding: 6em 3em 4em 3em;
+}
+
+#title h1 {
+text-align: center;
+font-size: 25vmin;
+margin: 0;
+font-family: monospace;
+text-shadow: 0.2rem 0.2rem 0.2rem black;
+}
+
+#meet, #use, #collaborate {
+background: #DACFE6;
+color: #32283D
+}
+
+#get, #learn {
+background: #32283D;
+color: #dfdfdf;
+}
+
+#footer {
+background: #32283D;
+color: #dfdfdf;
+text-align: center;
+margin-bottom: 4em;
+font-size: 80%;
+}
+
+#meet, #get, #use, #learn, #collaborate, #footer {
+padding: 2em 3em;
+}
+
+.cols {
+display: table-cell;
+width: 33%;
+}
+
+h1 {
+text-align: center;
+}
+
+h1:after {
+content: "";
+display: block;
+position: relative;
+left: 45%;
+width: 10%;
+top: 0.2em;
+border-top: solid 0.1em #ECB824;
+padding-top: 0.5em;
+}
+
+#title h1:after {
+display: none;
+}
+
+code {
+background: #E6EEF2;
+padding: 0.1em 0.3em;
+}
+
+pre {
+background: #E6EEF2;
+border-left: solid 0.3em #7ED4FC;
+padding: 0.5em 1em;
+}
+
+pre code {
+padding: 0;
+}
+
+#get code, #learn code {
+background: #1A4D66;
+}
+
+#get pre, #learn pre {
+background: #1A4D66;
+}
+
+a {
+text-decoration: underline dotted;
+color: unset;
+}
+
