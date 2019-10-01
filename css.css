@@ -97,6 +97,17 @@ border-top: solid 0.1em #ECB824;
 padding-top: 0.5em;
 }
 
+h2:after, h2:after {
+content: "";
+display: block;
+position: relative;
+left: 0%;
+width: 10%;
+top: 0.2em;
+border-top: solid 0.1em #ECB824;
+padding-top: 0.5em;
+}
+
 #title h1:after {
 display: none;
 }
