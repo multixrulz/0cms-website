@@ -55,25 +55,13 @@ font-family: monospace;
 text-shadow: 0.2rem 0.2rem 0.2rem black;
 }
 
-#meet, #use, #collaborate {
-background: #DACFE6;
-color: #32283D
-}
-
-#get, #learn {
-background: #32283D;
-color: #dfdfdf;
-}
-
 #footer {
-background: #32283D;
-color: #dfdfdf;
 text-align: center;
 margin-bottom: 4em;
 font-size: 80%;
 }
 
-#meet, #get, #use, #learn, #collaborate, #footer {
+#meet, #get, #use, #learn, #extend, #collaborate, #footer {
 padding: 2em 3em;
 }
 
@@ -130,6 +118,17 @@ padding: 0.5em 1em;
 
 pre code {
 padding: 0;
+}
+
+/* Alternating colour stuff */
+#meet, #use, #extend, footer {
+background: #DACFE6;
+color: #32283D
+}
+
+#get, #learn, #collaborate {
+background: #32283D;
+color: #dfdfdf;
 }
 
 #get code, #learn code {

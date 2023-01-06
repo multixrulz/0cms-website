@@ -38,7 +38,7 @@
 <li>Structure and build your site your way: 0cms enables, it doesn’t prescribe.</li>
 </ul>
 </div>
-<p>0cms is built on the principal that the most maintainable code is the code you don’t write.  0cms does the least it possibly can to get your site to build.  As a result, it has no build system &ndash; instead it uses <a href="https://ninja-build.org/">Ninja</a>.</p>
+<p>0cms is built on the principle that the most maintainable code is the code you don’t write.  0cms does the least it possibly can to get your site to build.  As a result, it has no build system &ndash; instead it uses <a href="https://ninja-build.org/">Ninja</a>.</p>
 <p>0cms has no built-in code for blogs, feeds, or sitemaps.  It ships with no templates or themes or other paraphernalia.  This doesn’t mean that these things are impossible &ndash; they are totally possible, but you create and maintain them yourself.  This also means that the maintenance schedule is yours:  0cms won’t unexpectedly break or change your site when you upgrade.</p>
 </div>
 
@@ -55,7 +55,6 @@
 <pre><code>source = &quot;src&quot;
 target = &quot;html&quot;
 </code></pre>
-
 <p>0cms-template:</p>
 <pre><code>Template(&quot;&quot;&quot;&lt;!DOCTYPE html&gt;
 &lt;html&gt;
@@ -68,7 +67,6 @@ target = &quot;html&quot;
 &lt;/html&gt;
 &quot;&quot;&quot;)
 </code></pre>
-
 <p>index.html:</p>
 <pre><code>Replacements(
     title=&quot;My first 0cms website&quot;
@@ -80,11 +78,9 @@ WebPage(Markdown(&quot;&quot;&quot;
 I've just created my first 0cms website!
 &quot;&quot;&quot;))
 </code></pre>
-
 <p>Now open a shell in your website directory and run</p>
 <pre><code>% 0cms
 </code></pre>
-
 <p>0cms should build your site, and you can examine the output in the <code>html</code> directory.</p>
 </div>
 
@@ -103,7 +99,6 @@ site_target = 'html'
 ignore_source = []
 ignore_target = []
 </code></pre>
-
 <p>0cms uses a foolproof method to determine the files that appear in the built website:  everything in the source website.  So you structure your source the way you want, and that structure is mirrored in the target.  There are no magic targets that get built automatically, and no source files that disappear &ndash; with one exception:  <code>0cms-template</code> files are built to <code>0cms-template.built</code> files in the source tree, and neither appears in the target tree.</p>
 <dl>
 <dt>site_source (string)</dt>
@@ -154,11 +149,9 @@ ignore_target = []
 <p>You use this to use Markdown-formatted text in a page.  For example:</p>
 <pre><code>WebPage(Markdown(&quot;&quot;&quot;# Hello World&quot;&quot;&quot;))
 </code></pre>
-
 <p>Use <code>Markdown.default_extensions()</code> to specify the python-markdown extensions you want to use.  When this is used in a template, the extensions apply to all pages using that template.  When used in a page, they only apply to that page.  For example:</p>
 <pre><code>Markdown.default_extensions(['smarty', 'fenced_code'])
 </code></pre>
-
 <p>Markdown extensions can also be specified each time you create a Markdown object.  For example:</p>
 <pre><code>Markdown(&quot;&quot;&quot;
 # Here’s some code
@@ -170,13 +163,11 @@ print(&quot;Hello World&quot;)
 ```
 &quot;&quot;&quot;, extensions=['fenced_code'], overwrite=True)
 </code></pre>
-
 <p>The overwrite argument defaults to False, meaning that the extensions in the list are added to the defaults.  If you supply <code>overwrite=True</code>, the extensions in the list are the only ones that are used.</p>
 <h3>Asciidoc class</h3>
 <p>You use this to use Asciidoc-formatted text in a page.  For example:</p>
 <pre><code>WebPage(Asciidoc(&quot;&quot;&quot;# Hello World&quot;&quot;&quot;))
 </code></pre>
-
 <p>Asciidoc is called with the following options:</p>
 <p><code>asciidoc -b html5 -s</code></p>
 <p>This generates html5 output and only outputs a HTML fragment, not a complete page.</p>
@@ -184,14 +175,12 @@ print(&quot;Hello World&quot;)
 <p>You use this to insert a HTML div element, as these are not well-supported by many markup languages.  Use it like this:</p>
 <pre><code>HtmlDiv(Markdown(&quot;&quot;&quot;# Hello World&quot;&quot;&quot;), htmlid=&quot;myid&quot;, htmlclass=&quot;myclass&quot;)
 </code></pre>
-
 <p>This usage allows your page source to mirror the generated HTML, where content is wrapped within a div tag.  The arguments <code>htmlid</code> and <code>htmlclass</code> are optional, and allow you to add id and class attributes to the div tag.</p>
 <p>You may use any number of content arguments to HtmlDiv.</p>
 <h3>HtmlImage class</h3>
 <p>You use this to insert a HTML image tag, as these are not well-supported by many markup languages.  Use it like this:</p>
 <pre><code>HtmlImage(&quot;path/to/image.jpg&quot;, alt=&quot;Picture of a tree&quot;, htmlid=&quot;myid&quot;, htmlclass=&quot;myclass&quot;)
 </code></pre>
-
 <p>The alt text is optional.  The arguments <code>htmlid</code> and <code>htmlclass</code> are optional, and allow you to add id and class attributes to the image tag.</p>
 <p>It’s not possible to insert images directly into headings or lists, etc. in many markup languages.  However, you can assign images to replacement fields, and use the field in the heading or list like this:</p>
 <pre><code>Replacements(
@@ -200,14 +189,12 @@ print(&quot;Hello World&quot;)
 
 WebPage(Markdown(&quot;&quot;&quot;# See, a heading with an image {img}&quot;&quot;&quot;))
 </code></pre>
-
 <h3>Html class</h3>
 <p>You can use this to insert plain HTML, if you ever need to do that.</p>
 <h3>DirListing class</h3>
 <p>This class can be used in .0s files for for generating feeds and the like.  Use it like this:</p>
 <pre><code>d = DirListing(pattern='*.html.0p')
 </code></pre>
-
 <p>DirListing returns a tuple of <code>SiteItem</code>s.  SiteItem has a <code>.source()</code> method that returns the complete path to the source file, and a <code>.url()</code> method that returns the absolute URL of the page, minus the protocol and domain parts.</p>
 <h3>Dependencies() function</h3>
 <p>You use this function do specify the dependencies of a .0s file.  You pass it a tuple of the full paths of files that the page depends on.</p>
@@ -218,7 +205,6 @@ WebPage(Markdown(&quot;&quot;&quot;# See, a heading with an image {img}&quot;&qu
     description=&quot;This will turn up in page summaries reported by search engines&quot;
 )
 </code></pre>
-
 <p>Pass in any replacement fields that you’ve used in your template or page as keyword arguments.</p>
 <p>Two replacements are supplied for you by 0cms: now (the build time) and mtime (the last modification time of the source file).  If you want these formatted in a particular way, define strftime format strings in your replacements, named now_format to format now, and mtime_format to format mtime.</p>
 <h3>WebPage() function</h3>
@@ -241,7 +227,6 @@ WebPage(Markdown(&quot;&quot;&quot;# See, a heading with an image {img}&quot;&qu
 <p>Use this class like:</p>
 <pre><code>page = Importer(path_to_source_file)
 </code></pre>
-
 <p>This provides you access to parts of a page, from some other page (for example, creating a feed that needs to know the title and description of each page).  The following methods are available from an imported page object:</p>
 <h4>replacements() function</h4>
 <p>Returns the replacements that have been specified by a call to <code>Replacements()</code>.</p>
@@ -249,7 +234,6 @@ WebPage(Markdown(&quot;&quot;&quot;# See, a heading with an image {img}&quot;&qu
 <p>Returns a particular replacement:</p>
 <pre><code>title = page.get_replacement('title')
 </code></pre>
-
 <h4>dependencies() function</h4>
 <p>Returns the dependecies that have been specified by a call to <code>Dependencies()</code>.</p>
 <h4>html() function</h4>
@@ -264,8 +248,50 @@ WebPage(Markdown(&quot;&quot;&quot;# See, a heading with an image {img}&quot;&qu
 <p>Calling 0cms produces a <code>build.ninja</code> file that is used by ninja to coordinate the build.  If you examine this file, you will find a program named 0build.  0build is a small program that is used as follows:</p>
 <pre><code>% 0build &lt;source_file&gt; &lt;template_file&gt; [other dependencies...] &lt;target file&gt;
 </code></pre>
-
 <p>You will probably never need to use 0build directly.</p>
+</div>
+
+<div id="extend">
+<h1>Extend</h1>
+<p>Do you need to write some helper classes to do things like</p>
+<ul>
+<li>embed a Youtube video by adding something like <code>YouTube("video_url")</code> to your source file</li>
+<li>create a calendar</li>
+</ul>
+<p>or some other repetitive thing?</p>
+<p>The way I handle this is to first add the following to <code>0cms-config</code>:</p>
+<pre><code># Put the pymodules directory in the python path
+import os
+import sys
+modulepath = os.path.join(os.getcwd(), &quot;pymodules/&quot;)
+sys.path.insert(0, modulepath)
+try:
+    pypath = [os.environ['PYTHONPATH'],]
+except KeyError:
+    pypath = []
+pypath.append(modulepath)
+os.environ['PYTHONPATH'] = ':'.join(pypath)
+</code></pre>
+<p>This adds another directory, at the same level as <code>src</code> and <code>html</code>, to your python path and allows you to import and run python code from there.</p>
+<p>Now you can write code to include in your pages.</p>
+<p>The basic template to follow is this:</p>
+<pre><code>from zcms.zcms import *
+
+class ActivityList(PageComponent):
+    def __init__(self, *content):
+        # Your initialisation code here.
+        super().__init__(content)
+
+    def __str__(self):
+        super().__str__()
+        return(&quot;The HTML that you want to turn up in your web page&quot;)
+</code></pre>
+<p>The <code>from zcms.zcms import *</code> is only necessary if you intend to inherit from classes that ship with 0cms.</p>
+<p>And that about covers it.  If you need more detail, check out the 0cms source code, or the live examples at</p>
+<ul>
+<li><a href="https://bitbucket.org/multixrulz/0cms.henley.id.au-source/">Source for this website</a></li>
+<li><a href="https://bitbucket.org/multixrulz/jared.henley.id.au-src/">Source for jared.henley.id.au</a></li>
+</ul>
 </div>
 
 <div id="collaborate">
@@ -276,7 +302,7 @@ WebPage(Markdown(&quot;&quot;&quot;# See, a heading with an image {img}&quot;&qu
 <div id="footer">
 <p>Copyright © 2019 Jared Henley.  Licenced <a href="http://creativecommons.org/licenses/by-nd/4.0/">CC-BY-ND</a>.</p>
 <p>Built with <a href="https://0cms.henley.id.au">0cms</a></p>
-<p>Last built 2019-11-14 12:40:55.181442</p>
+<p>Last built 2023-01-06 16:58:36.680513</p>
 </div>
 
 <div id="navigation">
@@ -285,6 +311,7 @@ WebPage(Markdown(&quot;&quot;&quot;# See, a heading with an image {img}&quot;&qu
 <li><a href="#get">Get</a></li>
 <li><a href="#use">Use</a></li>
 <li><a href="#learn">Learn</a></li>
+<li><a href="#extend">Extend</a></li>
 <li><a href="#collaborate">Collaborate</a></li>
 </ul>
 </div>
